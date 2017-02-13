@@ -1,0 +1,51 @@
+#!/bin/bash
+
+PINFILE=~/.pinned
+
+if [ $# -lt 1 ];then
+	exit 1
+fi
+
+sedescape() {
+	echo $1 | sed -r 's/([\$\.\*\/\[\\^])/\\\1/g' | sed 's/[]]/\[]]/g'
+}
+
+verintgrty() {
+	fcksum=$(sha1sum $1 | awk '{print $1}')
+	bcksum=$(sha1sum $2 | awk '{print $1}')
+
+	if [ $fcksum != $bcksum ];then
+		echo "Backup failed."
+		exit 2
+	fi
+}
+
+case $1 in
+-s)
+	if [ $# -gt 1 ];then
+		head -$2 $PINFILE | tail -1 | cut -d';' -f1
+	else
+		cut -d';' -f2 $PINFILE | cat -n
+	fi
+;;
+-d)
+	url=$(sedescape `head -$2 $PINFILE | tail -1 | cut -d';' -f1`)
+	sed -i "/^$url;.*/d" $PINFILE
+;;
+-n) wc -l $PINFILE | cut -d' ' -f1
+;;
+-e) $EDITOR $PINFILE
+;;
+-b)
+	cp $PINFILE{,.bk}
+	verintgrty $PINFILE{,.bk}
+	echo "Done."
+;;
+*)
+	if [[ -z $2 ]];then
+		echo "${1};No Description" | tr -d '\n' | sed 'a\' >> $PINFILE
+	else
+		echo "${1};$2" | tr -d '\n' | sed 'a\' >> $PINFILE
+	fi
+;;
+esac

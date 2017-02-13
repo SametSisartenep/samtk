@@ -1,0 +1,42 @@
+#!/bin/bash
+
+filetype=$1
+lcnstype=$2
+
+blue_color='\x1b[0;34m'
+reset_color='\x1b[0m'
+TEMPLATES=~/lib/templates
+
+function copy() {
+	printf "Copying to ${blue_color}%s${reset_color}...\n" $2
+	cp $1 $2
+}
+
+if [ $# -ge 3 ]; then
+	output=$3
+else
+	case $filetype in
+		license) output="$PWD/LICENSE" ;;
+		readme) output="$PWD/README.md" ;;
+	esac
+fi
+
+case $lcnstype in
+	cc0|public) license='CC0' ;;
+	gpl2) license='GPLv2' ;;
+	gpl3) license='GPLv3' ;;
+	lgpl) license='LGPL' ;;
+	mit) license='MIT' ;;
+	bsd2) license='BSD-2' ;;
+	bsd3) license='BSD-3' ;;
+	apache) license='Apache2' ;;
+	mozilla) license='Mozilla' ;;
+	isc) license='ISC';;
+	*) license='CC0'
+esac
+
+case $filetype in
+	license) copy ${TEMPLATES}/licenses/$license $output ;;
+	readme) copy ${TEMPLATES}/readmes/$license.md $output ;;
+	*) echo "Didn't copy anything."; exit 1
+esac

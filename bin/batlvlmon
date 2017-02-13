@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# batlvlmon - Monitor battery level and notify on threshold violation
+#
+
+BDIR=/sys/class/power_supply/BAT1
+
+LTHRSHLD=15
+UTHRSHLD=90
+
+popnotify() {
+		9menu -teleport -popup -label Battery\ Status "$1" exit
+}
+
+if [ -d $BDIR ];then
+	while true
+	do
+		full=$(cat $BDIR/charge_full)
+		curr=$(cat $BDIR/charge_now)
+		perc=$(echo "($curr * 100) / $full" | bc)
+		stat=$(cat $BDIR/status)
+
+		if [ $perc -le $LTHRSHLD -a $stat = Discharging ];then
+			popnotify 'Battery Low'
+		elif [ $perc -ge $UTHRSHLD -a $stat = Charging ];then
+			popnotify 'Battery Full'
+		fi
+
+		sleep 45
+	done
+else
+	exit 1
+fi

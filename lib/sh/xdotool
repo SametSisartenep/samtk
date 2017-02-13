@@ -1,0 +1,60 @@
+# $VoidLinux: lib/sh/xdotool,v 1.0 2017/01/19 03:54:39 sam Exp $
+#
+#	xdotool scripting utilities
+#
+
+gototag() {
+	xdotool key super+$1
+}
+
+nextwin() {
+	xdotool key super+j
+}
+
+prevwin() {
+	xdotool key super+k
+}
+
+zoomin() {
+	xdotool key shift+alt+Prior
+}
+
+zoomout() {
+	xdotool key shift+alt+Next
+}
+
+monocletag() {
+	gototag $1
+	xdotool key super+m
+}
+
+monocletags() {
+	for i in $@
+	do
+		monocletag $i
+	done
+}
+
+tiletag() {
+	gototag $1
+	xdotool key super+t
+}
+
+tiletags() {
+	for i in $@
+	do
+		tiletag $i
+	done
+}
+
+floattag() {
+	gototag $1
+	xdotool key super+f
+}
+
+floattags() {
+	for i in $@
+	do
+		floattag $i
+	done
+}

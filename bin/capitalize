@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ "$1" == "" ]; then
+  read input
+else
+  input=$1
+fi
+
+echo "$input" | tr '[:upper:]' '[:lower:]' | sed 's/[^ _-]*/\u&/g'

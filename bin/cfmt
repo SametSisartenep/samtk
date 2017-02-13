@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# A fork from paulfryzel's gist:3947535
+
+if [[ $# -ne 1 ]]; then
+  echo "Usage: cfmt <file>"
+else
+  astyle \
+    --style=linux \
+    --lineend=linux \
+    --preserve-date \
+    --pad-header \
+    --align-pointer=name \
+    --align-reference=name \
+    --pad-oper \
+    --suffix=none \
+    --indent=tab=8 \
+    --max-code-length=75 \
+    --verbose \
+    $1
+fi

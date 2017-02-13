@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# statmon - Start system monitoring tools
+#
+
+[ -r ~/lib/sh/xdotool ] && . ~/lib/sh/xdotool
+
+runtool() {
+	st -f Inconsolata:size=12.5 -e $1 &
+	sleep 0.2
+}
+
+for p in 'watch -n2 df -ha' 'doas watch -n3 netstat -untap' 'doas iftop -P -i wlp2s0' 'watch -n2 ss -untap' htop 'atop 5'
+do
+	runtool "$p"
+done
+
+nextwin
+
+for i in `seq 1 3`
+do
+	nextwin
+	for i in `seq 1 6`
+	do
+		zoomout
+	done
+done

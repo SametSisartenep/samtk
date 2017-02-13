@@ -1,0 +1,18 @@
+#!/bin/sh
+
+fstatus=$(xset q | grep DPMS\ is | awk '{print $3}')
+cstatus=''
+
+if [ $fstatus = Enabled ];then
+	xset -dpms
+	xset s off
+	xautolock -disable
+	cstatus=disabled
+else
+	xset +dpms
+	xset s on
+	xautolock -enable
+	cstatus=enabled
+fi
+
+echo DPMS \& screen locker $cstatus.

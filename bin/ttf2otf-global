@@ -1,0 +1,61 @@
+#!/usr/bin/env zsh
+
+if [[ ! -x "`which fontforge`" ]]; then
+  echo "Fontforge not found. Aborting.";
+  exit 1;
+fi
+
+# Make sure fc-list is aware of all installed fonts
+echo -n "Performing initial scan of fonts... ";
+fc-cache -f;
+echo "done.";
+
+# fontforge doesn't seem to support saving into other directories, so we must
+# copy TTF files into a temp directory, generate, then move and delete.
+export TMPDIR=`mktemp -d`;
+[[ ! -d $TMPDIR ]] && exit 1;
+
+# Find all TTF files in the fc cache and copy them to the temp dir
+echo -n "Finding system-wide TTF files... ";
+for f in $(fc-list : file); do
+  f="${f%:}";  # Strip the colon from the end
+  [[ -f "$f" && $f == *.ttf ]] && cp "$f" "$TMPDIR/";
+done
+echo "done.";
+
+# Find all TTF files in the temp dir and convert them to OTF
+echo -n "Converting TTF fonts to OTF.";
+(
+  cd "$TMPDIR";
+  export FONTFORGE_LANGUAGE=ff;
+  for f in $(find . -iname \*.ttf); do
+    echo -n ".";
+    fontforge -c 'Open($1); Generate($1:r + ".otf");' "$f" > /dev/null 2> /dev/null
+  done;
+  wait;
+);
+echo " done.";
+
+# Find all OTF files we generated and move them to ~/.fonts/
+echo -n "Building user font directory... ";
+[[ ! -e ~/.fonts ]] && mkdir ~/.fonts;
+  mv $TMPDIR/*.otf ~/.fonts/;
+echo "done.";
+
+# Clean up
+echo -n "Cleaning up... ";
+rm -r "$TMPDIR";
+
+# Find all TTF fonts present in ~/.fonts and move to ~/.fonts~ to avoid clashes
+[[ ! -e ~/.fonts~ ]] && mkdir ~/.fonts~;
+mv ~/.fonts/*.ttf ~/.fonts~/;
+[[ -z $(ls -A ~/.fonts~) ]] && rmdir ~/.fonts~;  # Empty? Remove it.
+echo "done.";
+
+# Finally rebuild font cache again with new OTF fonts
+echo -n "Rebuilding font cache... ";
+fc-cache -r -f;
+echo "done.";
+
+echo "You may need to restart applications to see the changed fonts. Any TTF files ";
+echo "you may have had in ~/.fonts/ have been moved to ~/.fonts~/.";

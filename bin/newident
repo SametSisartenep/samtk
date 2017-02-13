@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# Rename user, rename group and relocate home directory.
+#
+# usage:
+#      # newident user newuser
+#
+
+usermod -l $2 $1
+groupmod -n $2 $1
+usermod -d /home/$2 -m $2

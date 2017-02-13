@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# wbrun - Setup workbench
+#
+
+[ -r ~/lib/sh/xdotool ] && . ~/lib/sh/xdotool
+
+startsysmon() {
+	statmon
+	sleep 0.1
+}
+
+gototag 2
+startsysmon
+
+monocletags 6 9 1
+floattags 4 5 8
+
+gototag 2
