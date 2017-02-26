@@ -1,5 +1,8 @@
 #!/bin/bash
 
+AUTHOR='Rodrigo González López'
+YEAR=$(date +'%Y')
+
 filetype=$1
 lcnstype=$2
 
@@ -7,16 +10,27 @@ blue_color='\x1b[0;34m'
 reset_color='\x1b[0m'
 TEMPLATES=~/lib/templates
 
-function copy() {
-	printf "Copying to ${blue_color}%s${reset_color}...\n" $2
-	cp $1 $2
+usage() {
+	echo "usage: $(basename $0) <filetype> <license>" >&2
+	exit 1
 }
 
-if [ $# -ge 3 ]; then
+copy() {
+	printf "Copying to ${blue_color}%s${reset_color}...\n" $2
+	cp $1 $2
+	sed -i "s|<YEAR>|$YEAR|g" $2
+	sed -i "s|<OWNER>|$AUTHOR|g" $2
+}
+
+if [ $# -lt 2 ];then
+	usage
+fi
+
+if [ $# -ge 3 ];then
 	output=$3
 else
 	case $filetype in
-		license) output="$PWD/LICENSE" ;;
+		license|licence) output="$PWD/LICENSE" ;;
 		readme) output="$PWD/README.md" ;;
 	esac
 fi
@@ -36,7 +50,7 @@ case $lcnstype in
 esac
 
 case $filetype in
-	license) copy ${TEMPLATES}/licenses/$license $output ;;
+	license|licence) copy ${TEMPLATES}/licenses/$license $output ;;
 	readme) copy ${TEMPLATES}/readmes/$license.md $output ;;
 	*) echo "Didn't copy anything."; exit 1
 esac
