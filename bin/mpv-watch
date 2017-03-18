@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ $# -lt 1 ];then
+	exit 1
+fi
+
+case $1 in
+nhk|nhkworld)
+	mpv https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8
+	;;
+tve|24h|tve24)
+	mpv http://rtve-live.hds.adaptive.level3.net/hls-live/rtvegl8-24hlv3aomgl8/_definst_/live/stream2.m3u8
+	;;
+	*) echo There\'s no such channel. >&2 && exit 1
+	;;
+esac

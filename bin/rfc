@@ -1,0 +1,28 @@
+#!/bin/sh
+
+DIR=~/Downloads/IETF/RFC\ Archive
+RMT=0
+
+if [ $# -lt 1 ];then
+	exit 1
+fi
+
+while getopts :r: opt
+do
+	case $opt in
+	r)
+		RMT=1
+		DIR=https://tools.ietf.org/rfc
+	;;
+	*) exit 2
+	esac
+done
+shift $(($OPTIND - 1))
+
+echo fetching from $DIR >&2
+
+if [ $RMT -eq 0 ];then
+	$PAGER "$DIR"/rfc$1.txt
+else
+	curl -s $DIR/rfc$OPTARG.txt | $PAGER
+fi

@@ -1,3 +1,3 @@
 #!/bin/sh
 
-firejail --profile=.config/firejail/telegram.profile ~/.Telegram/Telegram/Telegram
+firejail --profile=~/.config/firejail/telegram.profile ~/.Telegram/Telegram/Telegram

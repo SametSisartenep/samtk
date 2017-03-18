@@ -5,7 +5,7 @@ if [[ $# -ne 1 ]]; then
   echo "Usage: cfmt <file>"
 else
   astyle \
-    --style=linux \
+    --style=knf \
     --lineend=linux \
     --preserve-date \
     --pad-header \

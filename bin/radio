@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Listen to radio stations
+#
+
+if [ $# -lt 1 ];then
+	echo No station chosen: End of Transmission. >&2
+	exit 1
+fi
+
+case $1 in
+2f30) mpv --no-cache http://radio.2f30.org:8000/live.mp3
+;;
+*) echo There\'s no such station. >&2; exit 2
+;;
+esac

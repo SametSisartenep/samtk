@@ -37,7 +37,7 @@ move_to_ws() {
 		return
 	fi
 	curr_ws=$(cat /tmp/workspaces/curr);
-	if [ $ws_num == $curr_ws ]; then
+	if [ $ws_num = $curr_ws ]; then
 		# same workspace. ignore flicker
 		return
 	fi

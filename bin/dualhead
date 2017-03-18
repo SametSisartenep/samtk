@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# forked from z3bra's scripts.
+#
+
+case "$1" in
+    left)
+        xrandr --output eDP1 --primary --auto --output DP1 --auto --right-of eDP1;;
+    right)
+        xrandr --output eDP1 --primary --auto --output DP1 --auto --left-of eDP1;;
+    dup)
+        xrandr --output eDP1 --same-as DP1 --output DP1 --primary;;
+    screen)
+        xrandr --output eDP1 --primary --auto --output DP1 --off;;
+    laptop)
+        xrandr --output DP1 --primary --auto --output eDP1 --off;;
+    list)
+        xrandr | grep '\<connected\>' | cut -d\  -f1;;
+    *) echo `basename $0` '{left|right|dup|screen|laptop|list}';;
+esac

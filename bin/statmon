@@ -10,7 +10,7 @@ runtool() {
 	sleep 0.2
 }
 
-for p in 'watch -n2 df -ha' 'doas watch -n3 netstat -untap' 'doas iftop -P -i wlp2s0' 'watch -n2 ss -untap' htop 'atop 5'
+for p in 'watch -n2 df -ha' 'sudo watch -n3 netstat -untap' 'sudo iftop -P -i wlp2s0' 'watch -n2 ss -untap' htop 'atop 5'
 do
 	runtool "$p"
 done

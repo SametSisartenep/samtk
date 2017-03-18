@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 AUTHOR='Rodrigo González López'
 YEAR=$(date +'%Y')
@@ -6,17 +6,15 @@ YEAR=$(date +'%Y')
 filetype=$1
 lcnstype=$2
 
-blue_color='\x1b[0;34m'
-reset_color='\x1b[0m'
 TEMPLATES=~/lib/templates
 
 usage() {
-	echo "usage: $(basename $0) <filetype> <license>" >&2
+	echo "usage: ${0##*/} <filetype> <license>" >&2
 	exit 1
 }
 
 copy() {
-	printf "Copying to ${blue_color}%s${reset_color}...\n" $2
+	printf "Copying to %s...\n" $2
 	cp $1 $2
 	sed -i "s|<YEAR>|$YEAR|g" $2
 	sed -i "s|<OWNER>|$AUTHOR|g" $2
